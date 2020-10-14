@@ -48,17 +48,18 @@ public class StageOneWorld extends World {
         // handle player win or loss
         if (!player.isAlive()) {
             World world = new World(getWidth(),getHeight());
+            world.setTime(-200); // displays lose screen
             Display worldDisplay = new Display(getWidth(), getHeight(), world);
             world.setDisplay(worldDisplay);
             getDisplay().close();
             worldDisplay.run();
         }
-        else if (!enemy.isAlive()) {
+        else if (!enemy.isAlive() && time > 0) {
             setTime(-400);;
         }
 
         if (time == -200) {
-            addSprite(new Sprite(200, 0, 716, 145, "WinText.png"));
+            addSprite(Consts.winTextSprite);
             player.setInvincibility(true);
         }
         else if (time > -100 && time < 0) {

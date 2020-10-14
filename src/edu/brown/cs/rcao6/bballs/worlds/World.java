@@ -42,6 +42,7 @@ public class World {
         time = 0;
 
         player = new PlayerSprite(0, 0, Consts.playerWidth, Consts.playerHeight, Consts.playerImage);
+        sprites.add(player.createAura());
         sprites.add(player);
         enemy = null;  // is set when a stage is active
     }
@@ -58,8 +59,10 @@ public class World {
 
         // place to initialize stages or display certain screens
         if (time == 0) {
-            sprites.add(0, stageOneSprite);
-            sprites.add(0, stageTwoSprite);
+            removeSprite(Consts.loseTextSprite); // remove if exists
+            addSprite(Consts.stageSelectTextSprite);
+            addSprite(stageOneSprite, 0);
+            addSprite(stageTwoSprite, 0);
         }
 
         // handle stage pne selection
@@ -77,6 +80,11 @@ public class World {
             world.setDisplay(worldDisplay);
             display.close();
             worldDisplay.run();
+        }
+
+        // display lose screen
+        if (time < 0 && !hasSprite(Consts.loseTextSprite)) {
+            addSprite(Consts.loseTextSprite);
         }
 
         stepAllSpritesAndIncrementTime();
@@ -118,6 +126,32 @@ public class World {
      */
     public void addSprite(Sprite s) {
         sprites.add(s);
+    }
+
+    /**
+     * Adds a Sprite to World with a given index (low indices are drawn first). Adds Sprite to last index if index bad.
+     * @param s Sprite to add to World
+     * @param index index to add Sprite into World (lower indices are drawn first)
+     */
+    public void addSprite(Sprite s, int index) {
+        if (index >= 0 && index < sprites.size()) {
+            sprites.add(index, s);
+        } else {
+            sprites.add(s);
+        }
+    }
+
+    /**
+     * Removes given Sprite from World. Uses equals() method to compare Sprites. Removes first found that matches.
+     * @param s Sprite to remove.
+     */
+    public void removeSprite(Sprite s) {
+        for (int i = 0; i < sprites.size(); i ++) {
+            if (sprites.get(i).equals(s)) {
+                sprites.remove(i);
+                return;
+            }
+        }
     }
 
     /**
