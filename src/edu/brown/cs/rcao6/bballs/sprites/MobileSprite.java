@@ -1,4 +1,6 @@
-package edu.brown.cs.rcao6.bballs;
+package edu.brown.cs.rcao6.bballs.sprites;
+
+import edu.brown.cs.rcao6.bballs.worlds.World;
 
 /**
  * Class for a kind of Sprite that keep track of x and y velocities.

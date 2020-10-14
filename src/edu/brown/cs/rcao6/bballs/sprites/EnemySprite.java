@@ -1,8 +1,10 @@
-package edu.brown.cs.rcao6.bballs;
+package edu.brown.cs.rcao6.bballs.sprites;
+
+import edu.brown.cs.rcao6.bballs.worlds.World;
 
 public class EnemySprite extends Sprite {
     private int hp;  // hit/health points of EnemySprite
-    private int maxHp;
+    private final int maxHp;
 
     public EnemySprite(double x, double y, int width, int height, String image, int hp) {
         super(x, y, width, height, image);

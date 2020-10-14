@@ -1,4 +1,6 @@
-package edu.brown.cs.rcao6.bballs;
+package edu.brown.cs.rcao6.bballs.sprites;
+
+import edu.brown.cs.rcao6.bballs.worlds.World;
 
 /**
  * General class representing a Sprite that resides in a World.

@@ -1,5 +1,7 @@
 package edu.brown.cs.rcao6.bballs;
 
+import edu.brown.cs.rcao6.bballs.worlds.World;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;

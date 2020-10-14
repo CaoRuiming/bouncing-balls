@@ -1,16 +1,26 @@
-package edu.brown.cs.rcao6.bballs;
+package edu.brown.cs.rcao6.bballs.worlds;
 
-import java.util.List;
+import edu.brown.cs.rcao6.bballs.Consts;
+import edu.brown.cs.rcao6.bballs.Display;
+import edu.brown.cs.rcao6.bballs.sprites.EnemySprite;
+import edu.brown.cs.rcao6.bballs.sprites.MobileSprite;
+import edu.brown.cs.rcao6.bballs.sprites.PlayerSprite;
+import edu.brown.cs.rcao6.bballs.sprites.Sprite;
 
+/**
+ * World that manages state for stage one.
+ */
 public class StageOneWorld extends World {
-//    private World parentWorld;
     private int angle1;
     private int angle2;
 
-
+    /**
+     * Constructs and instance of StageOneWorld.
+     * @param width width of World
+     * @param height height of World
+     */
     public StageOneWorld(int width, int height) {
         super(width, height);
-//        this.parentWorld = parentWorld;
         EnemySprite enemy = new EnemySprite((width / 2) - (Consts.enemySize / 2), Consts.enemyYCoordinate,
                 Consts.enemySize, Consts.enemySize, Consts.stageOneImage, Consts.stageOneHp);
         setEnemy(enemy);
@@ -28,7 +38,6 @@ public class StageOneWorld extends World {
 
         // handle Stage phases
         double hpPercentage = ((enemy.getHp() + 0.0) / enemy.getMaxHp()) * 100;
-        System.out.println(hpPercentage);
         if (hpPercentage > 60)
             spawnBullets(1);
         else if (hpPercentage > 10)
@@ -36,9 +45,10 @@ public class StageOneWorld extends World {
         else if (hpPercentage > 0)
             spawnBullets(3);
 
+        // handle player win or loss
         if (!player.isAlive()) {
-            World world = new World(1300,800);
-            Display worldDisplay = new Display(1300, 800, world);
+            World world = new World(getWidth(),getHeight());
+            Display worldDisplay = new Display(getWidth(), getHeight(), world);
             world.setDisplay(worldDisplay);
             getDisplay().close();
             worldDisplay.run();
@@ -53,12 +63,11 @@ public class StageOneWorld extends World {
         }
         else if (time > -100 && time < 0) {
             player.setInvincibility(false);
-//            World world = new World(1300,800);
-//            world.setTime(0);
-//            Display worldDisplay = new Display(1300, 800, world);
-//            world.setDisplay(worldDisplay);
-//            getDisplay().close();
-//            worldDisplay.run();
+            World world = new World(getWidth(),getHeight());
+            Display worldDisplay = new Display(getWidth(), getHeight(), world);
+            world.setDisplay(worldDisplay);
+            getDisplay().close();
+            worldDisplay.run();
         }
 
         stepAllSpritesAndIncrementTime();

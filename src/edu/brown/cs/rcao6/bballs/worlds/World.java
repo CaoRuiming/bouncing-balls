@@ -1,4 +1,10 @@
-package edu.brown.cs.rcao6.bballs;
+package edu.brown.cs.rcao6.bballs.worlds;
+
+import edu.brown.cs.rcao6.bballs.Consts;
+import edu.brown.cs.rcao6.bballs.Display;
+import edu.brown.cs.rcao6.bballs.sprites.EnemySprite;
+import edu.brown.cs.rcao6.bballs.sprites.PlayerSprite;
+import edu.brown.cs.rcao6.bballs.sprites.Sprite;
 
 import java.awt.*;
 import java.util.*;
@@ -9,8 +15,8 @@ import java.util.List;
  */
 public class World {
     private Display display;
-    private List<Sprite> sprites;
-    private PlayerSprite player;
+    private final List<Sprite> sprites;
+    private final PlayerSprite player;
     private EnemySprite enemy;
     private final int width;
     private final int height;
@@ -41,37 +47,6 @@ public class World {
     }
 
     /**
-     * Resets World to initial state.
-     */
-    public void reset() {
-        display = new Display(width, height, this);
-        sprites = new ArrayList<>();
-        mouseLocX = 0;
-        mouseLocY = 0;
-        mouseClickX = 0;
-        mouseClickY = 0;
-        time = 0;
-
-        player = new PlayerSprite(0, 0, Consts.playerWidth, Consts.playerHeight, Consts.playerImage);
-        sprites.add(player);
-    }
-
-    /**
-     * Starts loop that runs World.
-     */
-    public void run() {
-        display.run();
-    }
-
-    /**
-     * Closes Display of World, World must be reset() or recreated to be visible again.
-     */
-    public void close() {
-        display.close();
-//        display = null;
-    }
-
-    /**
      * Steps World through one unit of time.
      */
     public void step() {
@@ -97,7 +72,11 @@ public class World {
         }
         // handle stage two selection
         if (stageTwoSprite.containsPoint(mouseClickX, mouseClickY)) {
-            System.out.println("stage 2 selected");
+            StageTwoWorld world = new StageTwoWorld(width, height);
+            Display worldDisplay = new Display(width, height, world);
+            world.setDisplay(worldDisplay);
+            display.close();
+            worldDisplay.run();
         }
 
         stepAllSpritesAndIncrementTime();
@@ -206,14 +185,6 @@ public class World {
     }
 
     /**
-     * Sets the PlayerSprite of World.
-     * @param player new PlayerSprite of World
-     */
-    public void setPlayer(PlayerSprite player) {
-        this.player = player;
-    }
-
-    /**
      * Returns the EnemySprite of World.
      * @return EnemySprite of World
      */
@@ -250,6 +221,9 @@ public class World {
      * @return String for title of World window
      */
     public String getTitle() {
+        if (enemy != null) {
+            return "Enemy Health: " + Math.max(enemy.getHp(), 0);
+        }
         return "Bouncing Balls!";
     }
 
@@ -284,7 +258,6 @@ public class World {
      * @param y y coordinate of where mouse was moved to
      */
     public void mouseMoved(int x, int y) {
-        // System.out.println("mouseMoved:  " + x + ", " + y);
         mouseLocX = x;
         mouseLocY = y;
     }

@@ -1,7 +1,7 @@
-package edu.brown.cs.rcao6.bballs;
+package edu.brown.cs.rcao6.bballs.sprites;
 
-import edu.brown.cs.rcao6.bballs.Sprite;
-import edu.brown.cs.rcao6.bballs.World;
+import edu.brown.cs.rcao6.bballs.Consts;
+import edu.brown.cs.rcao6.bballs.worlds.World;
 
 public class PlayerSprite extends Sprite {
     private double centerX;
@@ -49,10 +49,8 @@ public class PlayerSprite extends Sprite {
         }
 
         if (time % 3 == 0) {
-//            System.out.println("before: " + world.getSprites().size());
             Sprite.shoot(world, new PlayerBulletSprite(getX()-10, getY(), 10, 10, bullet), time * 5 - 90, 2);
             Sprite.shoot(world, new PlayerBulletSprite(getX()+5, getY(), 10, 10, bullet), -time * 5 - 90, 2);
-//            System.out.println("after: " + world.getSprites().size());
         }
     }
 
@@ -87,9 +85,20 @@ public class PlayerSprite extends Sprite {
         public void step(World world) {
             super.step(world);
             EnemySprite enemy = world.getEnemy();
+
+            // deal damage to EnemySprite and despawn
             if (enemy != null && this.overlaps(enemy)) {
                 enemy.setHp(enemy.getHp() - damage);
-                System.out.println("hp: " + enemy.getHp());
+                this.kill();
+            }
+
+            // despawn if touching the left or right edges of world
+            if (getX() < 0 || getX() > (world.getWidth() - getWidth())) {
+                this.kill();
+            }
+
+            // despawn if touching the top or bottom edges of world
+            if (getY() < 0 || getY() > (world.getHeight() - getHeight())) {
                 this.kill();
             }
         }
