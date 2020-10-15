@@ -21,7 +21,7 @@ public class StageTwoWorld extends World {
     public StageTwoWorld(int width, int height) {
         super(width, height);
         EnemySprite enemy = new EnemySprite((width / 2.0) - (Consts.enemySize / 2.0), Consts.enemyYCoordinate,
-                Consts.enemySize, Consts.enemySize, Consts.stageOneImage, Consts.stageTwoHp);
+                Consts.enemySize, Consts.enemySize, Consts.stageTwoImage, Consts.stageTwoHp);
         setEnemy(enemy);
         addSprite(enemy);
 
