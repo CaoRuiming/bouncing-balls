@@ -85,9 +85,9 @@ public class StageTwoWorld extends World {
     }
 
     /**
-     * A Sprite that falls down according to gravity and kills PlayerSprite on impact.
+     * A Sprite that falls down according to gravity and kills PlayerSprite on impact.`
      */
-    static class BulletSprite extends MobileSprite {
+    private static class BulletSprite extends MobileSprite {
         public BulletSprite(double x, double y, int width, int height, String image) {
             super(x, y, width, height, image);
         }

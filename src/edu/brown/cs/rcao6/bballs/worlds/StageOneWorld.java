@@ -101,24 +101,24 @@ public class StageOneWorld extends World {
             angle2 -= spin;
             String ball1 = Consts.circleImage1;
             String ball2 = Consts.circleImage2;
-            Sprite.shoot(this, new HeavyBulletSprite(x,y,10,10,ball1), angle1, speed);
-            Sprite.shoot(this, new HeavyBulletSprite(x,y,10,10,ball2), angle1 + 180, speed);
-            Sprite.shoot(this, new HeavyBulletSprite(x+45,y,10,10,ball1), angle2, speed);
-            Sprite.shoot(this, new HeavyBulletSprite(x+45,y,10,10,ball2), angle2 + 180, speed);
-            Sprite.shoot(this, new HeavyBulletSprite(x,y+45,10,10,ball1), angle2, speed);
-            Sprite.shoot(this, new HeavyBulletSprite(x,y+45,10,10,ball2), angle2 + 180, speed);
-            Sprite.shoot(this, new HeavyBulletSprite(x+45,y+45,10,10,ball1), angle1, speed);
-            Sprite.shoot(this, new HeavyBulletSprite(x+45,y+45,10,10,ball2), angle1 + 180, speed);
+            Sprite.shoot(this, new BulletSprite(x,y,10,10,ball1), angle1, speed);
+            Sprite.shoot(this, new BulletSprite(x,y,10,10,ball2), angle1 + 180, speed);
+            Sprite.shoot(this, new BulletSprite(x+45,y,10,10,ball1), angle2, speed);
+            Sprite.shoot(this, new BulletSprite(x+45,y,10,10,ball2), angle2 + 180, speed);
+            Sprite.shoot(this, new BulletSprite(x,y+45,10,10,ball1), angle2, speed);
+            Sprite.shoot(this, new BulletSprite(x,y+45,10,10,ball2), angle2 + 180, speed);
+            Sprite.shoot(this, new BulletSprite(x+45,y+45,10,10,ball1), angle1, speed);
+            Sprite.shoot(this, new BulletSprite(x+45,y+45,10,10,ball2), angle1 + 180, speed);
         }
     }
 
     /**
      * A Sprite that falls down according to gravity and kills PlayerSprite on impact.
      */
-    static class HeavyBulletSprite extends MobileSprite {
+    private static class BulletSprite extends MobileSprite {
         private final double gravity;
 
-        public HeavyBulletSprite(double x, double y, int width, int height, String image) {
+        public BulletSprite(double x, double y, int width, int height, String image) {
             super(x, y, width, height, image);
             gravity = 0.05;
         }

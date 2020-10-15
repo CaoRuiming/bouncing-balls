@@ -85,7 +85,7 @@ public class PlayerSprite extends Sprite {
      * A sprite that always follows PlayerSprite. Helps with visibility of PlayerSprite, especially in peripheral
      * vision.
      */
-    public class PlayerAuraSprite extends PlayerSprite {
+    private static class PlayerAuraSprite extends Sprite {
         public PlayerAuraSprite(double x, double y, int width, int height, String image) {
             super(x, y, width, height, image);
         }
@@ -93,16 +93,15 @@ public class PlayerSprite extends Sprite {
         @Override
         public void step(World world) {
             // center self on mouse location, which also happens to center this Sprite on PlayerSprite
-            setLocation(world.getMouseLocX(), world.getMouseLocY());
-            setX(centerX - (getWidth() / 2) - 2);
-            setY(centerY - (getHeight() / 2) - 2);
+            setX(world.getMouseLocX() - (getWidth() / 2.0));
+            setY(world.getMouseLocY() - (getHeight() / 2.0));
         }
     }
 
     /**
      * Sprites that are fired from PlayerSprite and deal damage to EnemySprite.
      */
-    static class PlayerBulletSprite extends MobileSprite {
+    private static class PlayerBulletSprite extends MobileSprite {
         private final int damage;
 
         public PlayerBulletSprite(double x, double y, int width, int height, String image) {
