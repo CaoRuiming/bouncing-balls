@@ -4,6 +4,9 @@ import edu.brown.cs.rcao6.bballs.worlds.World;
 
 import java.awt.*;
 
+/**
+ * This is where the application is started.
+ */
 public class Main {
     public static void main(String[] args) {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();

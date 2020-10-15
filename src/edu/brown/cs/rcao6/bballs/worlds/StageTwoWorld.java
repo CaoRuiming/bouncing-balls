@@ -20,7 +20,7 @@ public class StageTwoWorld extends World {
      */
     public StageTwoWorld(int width, int height) {
         super(width, height);
-        EnemySprite enemy = new EnemySprite((width / 2) - (Consts.enemySize / 2), Consts.enemyYCoordinate,
+        EnemySprite enemy = new EnemySprite((width / 2.0) - (Consts.enemySize / 2.0), Consts.enemyYCoordinate,
                 Consts.enemySize, Consts.enemySize, Consts.stageOneImage, Consts.stageTwoHp);
         setEnemy(enemy);
         addSprite(enemy);
@@ -48,7 +48,7 @@ public class StageTwoWorld extends World {
             worldDisplay.run();
         }
         else if (!enemy.isAlive() && time > 0) {
-            setTime(-400);;
+            setTime(-400);
         }
 
         if (time == -200) {
@@ -87,7 +87,7 @@ public class StageTwoWorld extends World {
     /**
      * A Sprite that falls down according to gravity and kills PlayerSprite on impact.
      */
-    class BulletSprite extends MobileSprite {
+    static class BulletSprite extends MobileSprite {
         public BulletSprite(double x, double y, int width, int height, String image) {
             super(x, y, width, height, image);
         }

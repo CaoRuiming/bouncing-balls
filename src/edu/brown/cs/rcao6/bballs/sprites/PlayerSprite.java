@@ -3,6 +3,9 @@ package edu.brown.cs.rcao6.bballs.sprites;
 import edu.brown.cs.rcao6.bballs.Consts;
 import edu.brown.cs.rcao6.bballs.worlds.World;
 
+/**
+ * User-controlled Sprite. Instances of this class will follow the location of the mouse cursor.
+ */
 public class PlayerSprite extends Sprite {
     private double centerX;
     private double centerY;
@@ -78,6 +81,10 @@ public class PlayerSprite extends Sprite {
         invincible = invincibility;
     }
 
+    /**
+     * A sprite that always follows PlayerSprite. Helps with visibility of PlayerSprite, especially in peripheral
+     * vision.
+     */
     public class PlayerAuraSprite extends PlayerSprite {
         public PlayerAuraSprite(double x, double y, int width, int height, String image) {
             super(x, y, width, height, image);
@@ -85,6 +92,7 @@ public class PlayerSprite extends Sprite {
 
         @Override
         public void step(World world) {
+            // center self on mouse location, which also happens to center this Sprite on PlayerSprite
             setLocation(world.getMouseLocX(), world.getMouseLocY());
             setX(centerX - (getWidth() / 2) - 2);
             setY(centerY - (getHeight() / 2) - 2);
@@ -94,8 +102,8 @@ public class PlayerSprite extends Sprite {
     /**
      * Sprites that are fired from PlayerSprite and deal damage to EnemySprite.
      */
-    public class PlayerBulletSprite extends MobileSprite {
-        private int damage;
+    static class PlayerBulletSprite extends MobileSprite {
+        private final int damage;
 
         public PlayerBulletSprite(double x, double y, int width, int height, String image) {
             super(x, y, width, height, image);

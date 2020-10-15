@@ -8,9 +8,9 @@ import edu.brown.cs.rcao6.bballs.worlds.World;
 public class Sprite {
     private double x;
     private double y;
-    private int width;
-    private int height;
-    private String image;
+    private final int width;
+    private final int height;
+    private final String image;
     private boolean alive;
 
     /**
@@ -61,34 +61,16 @@ public class Sprite {
     public int getHeight() { return height; }
 
     /**
-     * Sets the height of Sprite.
-     * @param height new height of Sprite
-     */
-    public void setHeight(int height) { this.height = height; }
-
-    /**
      * Returns the width of Sprite.
      * @return width of Sprite
      */
     public int getWidth() { return width; }
 
     /**
-     * Sets the width of Sprite
-     * @param width new width of Sprite
-     */
-    public void setWidth(int width) { this.width = width; }
-
-    /**
      * Returns the image path of Sprite.
      * @return image path of Sprite
      */
     public String getImage() { return image; }
-
-    /**
-     * Sets the image path of Sprite.
-     * @param image new image path of Sprite
-     */
-    public void setImage(String image) { this.image = image; }
 
     /**
      * Returns true if Sprite is alive.

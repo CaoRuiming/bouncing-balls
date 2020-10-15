@@ -41,6 +41,7 @@ public class World {
         mouseClickY = 0;
         time = 0;
 
+        // spawn the player sprite along with aura sprite (helps with visibility)
         player = new PlayerSprite(0, 0, Consts.playerWidth, Consts.playerHeight, Consts.playerImage);
         sprites.add(player.createAura());
         sprites.add(player);
@@ -96,10 +97,13 @@ public class World {
     protected void stepAllSpritesAndIncrementTime() {
         // call step() functions of Sprites and removes dead Sprites from World
         for (int i = 0; i < sprites.size(); i++) {
-            if (!sprites.get(i).isAlive())
+            if (!sprites.get(i).isAlive()) {
                 sprites.remove(i);
-            else
+                i--;
+            }
+            else {
                 sprites.get(i).step(this);
+            }
         }
 
         // increment time
@@ -152,14 +156,6 @@ public class World {
                 return;
             }
         }
-    }
-
-    /**
-     * Returns list of Sprites in World.
-     * @return list of Sprites in World
-     */
-    protected List<Sprite> getSprites() {
-        return sprites;
     }
 
     /**
