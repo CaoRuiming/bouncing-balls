@@ -2,10 +2,13 @@ package edu.brown.cs.rcao6.bballs.sprites;
 
 import edu.brown.cs.rcao6.bballs.worlds.World;
 
+import java.util.concurrent.Callable;
+
 /**
  * General class representing a Sprite that resides in a World.
  */
-public class Sprite {
+public class Sprite implements Callable<Object> {
+    private World world;
     private double x;
     private double y;
     private final int width;
@@ -21,7 +24,8 @@ public class Sprite {
      * @param height height of Sprite
      * @param image image path of Sprite
      */
-    public Sprite(double x, double y, int width, int height, String image) {
+    public Sprite(World world, double x, double y, int width, int height, String image) {
+        this.world = world;
         this.x = x;
         this.y = y;
         this.width = width;
@@ -29,6 +33,12 @@ public class Sprite {
         this.image = image;
         alive = true;
     }
+
+    /**
+     * Returns the World that Sprite is located in.
+     * @return World instance that Sprite is located in
+     */
+    public World getWorld() { return world; }
 
     /**
      * Returns the x coordinate of Sprite.
@@ -85,9 +95,17 @@ public class Sprite {
 
     /**
      * Handle Sprite behavior on world step.
-     * @param world world that Sprite should interact with during step
      */
-    public void step(World world) {}
+    public void step() {}
+
+    /**
+     * Calls the step method. Used for multithreading.
+     */
+    @Override
+    public Object call() {
+        step();
+        return null;
+    }
 
     /**
      * Given x and y coordinates of a point, determines if point lies within Sprite.
@@ -127,11 +145,11 @@ public class Sprite {
      * @param angle angle of sprite motion in degrees
      * @param speed speed of sprite motion
      */
-    public static void shoot(World world, MobileSprite sprite, double angle, double speed) {
+    public static void shoot(MobileSprite sprite, double angle, double speed) {
         sprite.setVx(speed * Math.cos(Math.toRadians(angle)));
         sprite.setVy(speed * Math.sin(Math.toRadians(angle)));
-        if(!world.hasSprite(sprite)) {
-            world.addSprite(sprite);
+        if(!sprite.getWorld().hasSprite(sprite)) {
+            sprite.getWorld().addSprite(sprite);
         }
     }
 }

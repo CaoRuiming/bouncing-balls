@@ -6,12 +6,15 @@ import edu.brown.cs.rcao6.bballs.sprites.Sprite;
  * Utility class that contains various constants.
  */
 public class Consts {
+    public final static boolean enableMultithreading = true;
+    public final static int numThreads = 10;
+
     public final static Sprite stageSelectTextSprite =
-            new Sprite(30, 30, 990, 115, "assets/selectionText.png");
+            new Sprite(null,30, 30, 990, 115, "assets/selectionText.png");
     public final static Sprite winTextSprite =
-            new Sprite(30, 30, 716, 145, "assets/winText.png");
+            new Sprite(null, 30, 30, 716, 145, "assets/winText.png");
     public final static Sprite loseTextSprite =
-            new Sprite(30, 30, 569, 111, "assets/loseText.png");
+            new Sprite(null, 30, 30, 569, 111, "assets/loseText.png");
 
     public final static String playerImage = "assets/redSquare.png";
     public final static int playerWidth = 5;

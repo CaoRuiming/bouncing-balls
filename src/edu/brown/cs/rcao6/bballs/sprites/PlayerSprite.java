@@ -19,8 +19,8 @@ public class PlayerSprite extends Sprite {
      * @param height height of PlayerSprite
      * @param image image path of PlayerSprite
      */
-    public PlayerSprite(double x, double y, int width, int height, String image) {
-        super(x, y, width, height, image);
+    public PlayerSprite(World world, double x, double y, int width, int height, String image) {
+        super(world, x, y, width, height, image);
         centerX = x + (0.5 * width);
         centerY = y + (0.5 * height);
         invincible = false;
@@ -41,27 +41,29 @@ public class PlayerSprite extends Sprite {
      * @return a Sprite that is larger than PlayerSprite and follows it around
      */
     public Sprite createAura() {
-        return new PlayerAuraSprite(0, 0, Consts.playerAuraSize, Consts.playerAuraSize, Consts.playerAuraImage);
+        return new PlayerAuraSprite(
+                getWorld(),0, 0, Consts.playerAuraSize, Consts.playerAuraSize, Consts.playerAuraImage);
     }
 
     @Override
-    public void step(World world) {
-        int time = world.getTime();
-        setLocation(world.getMouseLocX(), world.getMouseLocY());
+    public void step() {
+        World w = getWorld();
+        int time = w.getTime();
+        setLocation(w.getMouseLocX(), w.getMouseLocY());
         setX(centerX - getWidth());
         setY(centerY - getHeight());
         String bullet = Consts.playerBulletImage;
         if (time % 15 == 0) {
-            Sprite.shoot(world, new PlayerBulletSprite(getX(), getY()-5, 10, 10, bullet), 270, 2);
-            Sprite.shoot(world, new PlayerBulletSprite(getX()+2, getY()-5, 10, 10, bullet), 280, 2);
-            Sprite.shoot(world, new PlayerBulletSprite(getX()+4, getY()-5, 10, 10, bullet), 265, 2);
-            Sprite.shoot(world, new PlayerBulletSprite(getX()-2, getY()-5, 10, 10, bullet), 260, 2);
-            Sprite.shoot(world, new PlayerBulletSprite(getX()-4, getY()-5, 10, 10, bullet), 275, 2);
+            Sprite.shoot(new PlayerBulletSprite(w, getX(), getY()-5, 10, 10, bullet), 270, 2);
+            Sprite.shoot(new PlayerBulletSprite(w, getX()+2, getY()-5, 10, 10, bullet), 280, 2);
+            Sprite.shoot(new PlayerBulletSprite(w, getX()+4, getY()-5, 10, 10, bullet), 265, 2);
+            Sprite.shoot(new PlayerBulletSprite(w, getX()-2, getY()-5, 10, 10, bullet), 260, 2);
+            Sprite.shoot(new PlayerBulletSprite(w, getX()-4, getY()-5, 10, 10, bullet), 275, 2);
         }
 
         if (time % 3 == 0) {
-            Sprite.shoot(world, new PlayerBulletSprite(getX()-10, getY(), 10, 10, bullet), time * 5 - 90, 2);
-            Sprite.shoot(world, new PlayerBulletSprite(getX()+5, getY(), 10, 10, bullet), -time * 5 - 90, 2);
+            Sprite.shoot(new PlayerBulletSprite(w, getX()-10, getY(), 10, 10, bullet), time * 5 - 90, 2);
+            Sprite.shoot(new PlayerBulletSprite(w, getX()+5, getY(), 10, 10, bullet), -time * 5 - 90, 2);
         }
     }
 
@@ -86,15 +88,16 @@ public class PlayerSprite extends Sprite {
      * vision.
      */
     private static class PlayerAuraSprite extends Sprite {
-        public PlayerAuraSprite(double x, double y, int width, int height, String image) {
-            super(x, y, width, height, image);
+        public PlayerAuraSprite(World world, double x, double y, int width, int height, String image) {
+            super(world, x, y, width, height, image);
         }
 
         @Override
-        public void step(World world) {
+        public void step() {
             // center self on mouse location, which also happens to center this Sprite on PlayerSprite
-            setX(world.getMouseLocX() - (getWidth() / 2.0));
-            setY(world.getMouseLocY() - (getHeight() / 2.0));
+            World w = getWorld();
+            setX(w.getMouseLocX() - (getWidth() / 2.0));
+            setY(w.getMouseLocY() - (getHeight() / 2.0));
         }
     }
 
@@ -104,15 +107,16 @@ public class PlayerSprite extends Sprite {
     private static class PlayerBulletSprite extends MobileSprite {
         private final int damage;
 
-        public PlayerBulletSprite(double x, double y, int width, int height, String image) {
-            super(x, y, width, height, image);
+        public PlayerBulletSprite(World world, double x, double y, int width, int height, String image) {
+            super(world, x, y, width, height, image);
             damage = Consts.playerBulletDamage;
         }
 
         @Override
-        public void step(World world) {
-            super.step(world);
-            EnemySprite enemy = world.getEnemy();
+        public void step() {
+            super.step();
+            World w = getWorld();
+            EnemySprite enemy = w.getEnemy();
 
             // deal damage to EnemySprite and despawn
             if (enemy != null && this.overlaps(enemy)) {
@@ -121,12 +125,12 @@ public class PlayerSprite extends Sprite {
             }
 
             // despawn if touching the left or right edges of world
-            if (getX() < 0 || getX() > (world.getWidth() - getWidth())) {
+            if (getX() < 0 || getX() > (w.getWidth() - getWidth())) {
                 this.kill();
             }
 
             // despawn if touching the top or bottom edges of world
-            if (getY() < 0 || getY() > (world.getHeight() - getHeight())) {
+            if (getY() < 0 || getY() > (w.getHeight() - getHeight())) {
                 this.kill();
             }
         }

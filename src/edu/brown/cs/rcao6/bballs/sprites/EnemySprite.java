@@ -6,8 +6,8 @@ public class EnemySprite extends Sprite {
     private int hp;  // hit/health points of EnemySprite
     private final int maxHp;
 
-    public EnemySprite(double x, double y, int width, int height, String image, int hp) {
-        super(x, y, width, height, image);
+    public EnemySprite(World world, double x, double y, int width, int height, String image, int hp) {
+        super(world, x, y, width, height, image);
         this.hp = hp;
         this.maxHp = hp;
     }
@@ -36,7 +36,8 @@ public class EnemySprite extends Sprite {
         return maxHp;
     }
 
-    public void step(World world) {
+    @Override
+    public void step() {
         // enemy is no longer alive once hp is less than 0
         if (hp < 0) {
             this.kill();

@@ -21,8 +21,8 @@ public class StageOneWorld extends World {
      */
     public StageOneWorld(int width, int height) {
         super(width, height);
-        EnemySprite enemy = new EnemySprite((width / 2.0) - (Consts.enemySize / 2.0), Consts.enemyYCoordinate,
-                Consts.enemySize, Consts.enemySize, Consts.stageOneImage, Consts.stageOneHp);
+        EnemySprite enemy = new EnemySprite(this, (width / 2.0) - (Consts.enemySize / 2.0),
+                Consts.enemyYCoordinate, Consts.enemySize, Consts.enemySize, Consts.stageOneImage, Consts.stageOneHp);
         setEnemy(enemy);
         addSprite(enemy);
 
@@ -101,14 +101,14 @@ public class StageOneWorld extends World {
             angle2 -= spin;
             String ball1 = Consts.circleImage1;
             String ball2 = Consts.circleImage2;
-            Sprite.shoot(this, new BulletSprite(x,y,10,10,ball1), angle1, speed);
-            Sprite.shoot(this, new BulletSprite(x,y,10,10,ball2), angle1 + 180, speed);
-            Sprite.shoot(this, new BulletSprite(x+45,y,10,10,ball1), angle2, speed);
-            Sprite.shoot(this, new BulletSprite(x+45,y,10,10,ball2), angle2 + 180, speed);
-            Sprite.shoot(this, new BulletSprite(x,y+45,10,10,ball1), angle2, speed);
-            Sprite.shoot(this, new BulletSprite(x,y+45,10,10,ball2), angle2 + 180, speed);
-            Sprite.shoot(this, new BulletSprite(x+45,y+45,10,10,ball1), angle1, speed);
-            Sprite.shoot(this, new BulletSprite(x+45,y+45,10,10,ball2), angle1 + 180, speed);
+            Sprite.shoot(new BulletSprite(this, x,y,10,10,ball1), angle1, speed);
+            Sprite.shoot(new BulletSprite(this, x,y,10,10,ball2), angle1 + 180, speed);
+            Sprite.shoot(new BulletSprite(this, x+45,y,10,10,ball1), angle2, speed);
+            Sprite.shoot(new BulletSprite(this, x+45,y,10,10,ball2), angle2 + 180, speed);
+            Sprite.shoot(new BulletSprite(this, x,y+45,10,10,ball1), angle2, speed);
+            Sprite.shoot(new BulletSprite(this, x,y+45,10,10,ball2), angle2 + 180, speed);
+            Sprite.shoot(new BulletSprite(this, x+45,y+45,10,10,ball1), angle1, speed);
+            Sprite.shoot(new BulletSprite(this, x+45,y+45,10,10,ball2), angle1 + 180, speed);
         }
     }
 
@@ -118,22 +118,24 @@ public class StageOneWorld extends World {
     private static class BulletSprite extends MobileSprite {
         private final double gravity;
 
-        public BulletSprite(double x, double y, int width, int height, String image) {
-            super(x, y, width, height, image);
+        public BulletSprite(World world, double x, double y, int width, int height, String image) {
+            super(world, x, y, width, height, image);
             gravity = 0.05;
         }
 
-        public void step(World world) {
-            super.step(world);
+        @Override
+        public void step() {
+            super.step();
+            World w = getWorld();
             setVy(getVy() + gravity);
 
             // kill PlayerSprite if this Sprite is touching PlayerSprite
-            if (this.overlaps(world.getPlayer()) && !world.getPlayer().isInvincible()) {
-                world.getPlayer().kill();
+            if (this.overlaps(w.getPlayer()) && !w.getPlayer().isInvincible()) {
+                w.getPlayer().kill();
             }
 
             // kill Sprite if it reaches left or right edge of window
-            if ((getX() < 0) || (getX() > world.getWidth() - getWidth())) {
+            if ((getX() < 0) || (getX() > w.getWidth() - getWidth())) {
                 kill();
             }
         }

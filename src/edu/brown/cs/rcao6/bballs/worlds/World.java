@@ -9,12 +9,15 @@ import edu.brown.cs.rcao6.bballs.sprites.Sprite;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Class that manages the overall state of the Bouncing Balls application.
  */
 public class World {
     private Display display;
+    private ExecutorService stepExecutor;
     private final List<Sprite> sprites;
     private final PlayerSprite player;
     private EnemySprite enemy;
@@ -32,6 +35,7 @@ public class World {
      * @param height height of World
      */
     public World(int width, int height) {
+        stepExecutor = Executors.newFixedThreadPool(Consts.numThreads);
         this.width = width;
         this.height = height;
         sprites = new ArrayList<>();
@@ -42,7 +46,7 @@ public class World {
         time = 0;
 
         // spawn the player sprite along with aura sprite (helps with visibility)
-        player = new PlayerSprite(0, 0, Consts.playerWidth, Consts.playerHeight, Consts.playerImage);
+        player = new PlayerSprite(this,0, 0, Consts.playerWidth, Consts.playerHeight, Consts.playerImage);
         sprites.add(player.createAura());
         sprites.add(player);
         enemy = null;  // is set when a stage is active
@@ -54,9 +58,9 @@ public class World {
     public void step() {
         // sprites for stage selection
         Sprite stageOneSprite = new Sprite(
-                200, 200, Consts.stageImageSize, Consts.stageImageSize, Consts.stageOneImage);
+                this, 200, 200, Consts.stageImageSize, Consts.stageImageSize, Consts.stageOneImage);
         Sprite stageTwoSprite = new Sprite(
-                400, 200, Consts.stageImageSize, Consts.stageImageSize, Consts.stageTwoImage);
+                this, 400, 200, Consts.stageImageSize, Consts.stageImageSize, Consts.stageTwoImage);
 
         // place to initialize stages or display certain screens
         if (time == 0) {
@@ -95,6 +99,8 @@ public class World {
      * Calls the step() function of every Sprite, removes dead Sprites, and increments time.
      */
     protected void stepAllSpritesAndIncrementTime() {
+        List<Sprite> tasks = new ArrayList<>();
+
         // call step() functions of Sprites and removes dead Sprites from World
         for (int i = 0; i < sprites.size(); i++) {
             if (!sprites.get(i).isAlive()) {
@@ -102,7 +108,20 @@ public class World {
                 i--;
             }
             else {
-                sprites.get(i).step(this);
+                if (Consts.enableMultithreading) {
+                    tasks.add(sprites.get(i));
+                } else {
+                    sprites.get(i).step();
+                }
+            }
+        }
+
+        // if multithreading is enabled, run step() for all Sprites using thread pool
+        if (Consts.enableMultithreading) {
+            try {
+                stepExecutor.invokeAll(tasks);
+            } catch (Exception e) {
+                System.out.println(e);
             }
         }
 

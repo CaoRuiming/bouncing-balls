@@ -20,8 +20,8 @@ public class StageTwoWorld extends World {
      */
     public StageTwoWorld(int width, int height) {
         super(width, height);
-        EnemySprite enemy = new EnemySprite((width / 2.0) - (Consts.enemySize / 2.0), Consts.enemyYCoordinate,
-                Consts.enemySize, Consts.enemySize, Consts.stageTwoImage, Consts.stageTwoHp);
+        EnemySprite enemy = new EnemySprite(this, (width / 2.0) - (Consts.enemySize / 2.0),
+                Consts.enemyYCoordinate, Consts.enemySize, Consts.enemySize, Consts.stageTwoImage, Consts.stageTwoHp);
         setEnemy(enemy);
         addSprite(enemy);
 
@@ -79,8 +79,8 @@ public class StageTwoWorld extends World {
             double y = getEnemy().getY();
             double enemySize = getEnemy().getWidth();
             MobileSprite bullet = new BulletSprite(
-                    x + 0.5*enemySize - 5,y + 0.5*enemySize - 5,10,10,Consts.circleImage1);
-            Sprite.shoot(this, bullet, angle, speed);
+                    this, x + 0.5*enemySize - 5,y + 0.5*enemySize - 5,10,10,Consts.circleImage1);
+            Sprite.shoot(bullet, angle, speed);
         }
     }
 
@@ -88,17 +88,18 @@ public class StageTwoWorld extends World {
      * A Sprite that falls down according to gravity and kills PlayerSprite on impact.`
      */
     private static class BulletSprite extends MobileSprite {
-        public BulletSprite(double x, double y, int width, int height, String image) {
-            super(x, y, width, height, image);
+        public BulletSprite(World world, double x, double y, int width, int height, String image) {
+            super(world, x, y, width, height, image);
         }
 
         @Override
-        public void step(World world) {
-            super.step(world);
+        public void step() {
+            super.step();
+            World w = getWorld();
 
             // kill PlayerSprite if this Sprite is touching PlayerSprite
-            if (this.overlaps(world.getPlayer()) && !world.getPlayer().isInvincible()) {
-                world.getPlayer().kill();
+            if (this.overlaps(w.getPlayer()) && !w.getPlayer().isInvincible()) {
+                w.getPlayer().kill();
             }
         }
     }

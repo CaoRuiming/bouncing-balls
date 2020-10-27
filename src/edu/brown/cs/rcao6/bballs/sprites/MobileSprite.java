@@ -19,8 +19,8 @@ public class MobileSprite extends Sprite {
      * @param vx x velocity of MobileSprite
      * @param vy y velocity of MobileSprite
      */
-    public MobileSprite(double x, double y, int width, int height, String image, double vx, double vy) {
-        super(x, y, width, height, image);
+    public MobileSprite(World world, double x, double y, int width, int height, String image, double vx, double vy) {
+        super(world, x, y, width, height, image);
         this.vx = vx;
         this.vy = vy;
     }
@@ -33,8 +33,8 @@ public class MobileSprite extends Sprite {
      * @param height height of MobileSprite
      * @param image image path of MobileSprite
      */
-    public MobileSprite(double x, double y, int width, int height, String image) {
-        super(x, y, width, height, image);
+    public MobileSprite(World world, double x, double y, int width, int height, String image) {
+        super(world, x, y, width, height, image);
         this.vx = 0;
         this.vy = 0;
     }
@@ -71,18 +71,21 @@ public class MobileSprite extends Sprite {
         this.vy = vy;
     }
 
-    public void step(World world) {
+    @Override
+    public void step() {
+        World w = getWorld();
+
         // move the sprite
         setX(getX() + vx);
         setY(getY() + vy);
 
         // reverse x velocity if sprite will travel past left or right edges
-        if (getX() < 0 || getX() > (world.getWidth() - super.getWidth())) {
+        if (getX() < 0 || getX() > (w.getWidth() - super.getWidth())) {
             vx = vx * -1;
         }
 
         // reverse y velocity if sprite will travel past top or bottom edges
-        if (getY() < 0 || getY() > (world.getHeight() - super.getHeight())) {
+        if (getY() < 0 || getY() > (w.getHeight() - super.getHeight())) {
             vy = vy * -1;
         }
     }
