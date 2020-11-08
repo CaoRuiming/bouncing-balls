@@ -116,7 +116,15 @@ public class Display extends JComponent implements KeyListener, MouseListener, M
             frame.setCursor(blankCursor);
 
             frame.setTitle(world.getTitle());
+
+            long startTime = System.nanoTime();
             world.step();
+            long endTime = System.nanoTime();
+            long duration = (endTime - startTime);
+            if (world.getTime() % 100 == 0) {
+                System.out.println("Step execution time (nanoseconds): " + duration);
+            }
+
             repaint();
             try {
                 Thread.sleep(10);

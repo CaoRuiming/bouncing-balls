@@ -7,7 +7,7 @@ import edu.brown.cs.rcao6.bballs.sprites.Sprite;
  */
 public class Consts {
     public final static boolean enableMultithreading = true;
-    public final static int numThreads = 10;
+    public final static int numThreads = 16;
 
     public final static Sprite stageSelectTextSprite =
             new Sprite(null,30, 30, 990, 115, "assets/selectionText.png");
